@@ -15,6 +15,9 @@ DB_FAISS_PATH="vectorstore/db_faiss"
 @st.cache_resource
 
 def get_vectorstore():
+    if not os.path.exists(DB_FAISS_PATH):
+        from create_memory_for_llm import create_vector_db
+        create_vector_db()
     embedding_model=HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     db=FAISS.load_local(DB_FAISS_PATH,embedding_model, allow_dangerous_deserialization=True)
     return db
